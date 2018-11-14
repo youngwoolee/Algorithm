@@ -14,56 +14,26 @@
 package code;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Search_1 {
 
-    public static List sortByValue(final Map map) {
-
-        List<String> list = new ArrayList();
-        list.addAll(map.keySet());
-        Collections.sort(list,new Comparator() {
-            public int compare(Object o1,Object o2) {
-                Object v1 = map.get(o1);
-                Object v2 = map.get(o2);
-                return ((Comparable) v2).compareTo(v1);
-            }
-        });
-        return list;
-    }
-
 
     public int[] solution(int[] answers) {
-        int[] answer = {};
-
-        answer = new int[3];
-        Map<Integer, Integer> map = new HashMap<>();
-
-        int[] supo1 = {1,2,3,4,5};
-        int[] supo2 = {2,1,2,3,2,4,2,5};
-        int[] supo3 = {3,3,1,1,2,2,4,4,5,5};
-
-
-        int result1 =0, result2 =0, result3 =0;
-
+        int[] a = {1, 2, 3, 4, 5};
+        int[] b = {2, 1, 2, 3, 2, 4, 2, 5};
+        int[] c = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+        int[] score = new int[3];
         for(int i=0; i<answers.length; i++) {
-            if (answers[i] == supo1[i % 5]) result1++;
-            if (answers[i] == supo2[i % 8]) result2++;
-            if (answers[i] == supo3[i % 10]) result3++;
+            if(answers[i] == a[i%a.length]) {score[0]++;}
+            if(answers[i] == b[i%b.length]) {score[1]++;}
+            if(answers[i] == c[i%c.length]) {score[2]++;}
         }
-
-        map.put(1, result1);
-        map.put(2, result2);
-        map.put(3, result3);
-
-
-        Iterator it = sortByValue(map).iterator();
-        while(it.hasNext()) {
-            Integer temp = (Integer) it.next();
-            System.out.println(temp + " = " + map.get(temp));
-        }
-
-        return answer;
+        int maxScore = Math.max(score[0], Math.max(score[1], score[2]));
+        ArrayList<Integer> list = new ArrayList<>();
+        if(maxScore == score[0]) {list.add(1);}
+        if(maxScore == score[1]) {list.add(2);}
+        if(maxScore == score[2]) {list.add(3);}
+        return list.stream().mapToInt(i->i.intValue()).toArray();
     }
 
     public static void main(String[] args) {
