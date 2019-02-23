@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Vector;
 
+//결론적으로는 base-1 의 약수를 구하는 문제
 public class InterestingDigits {
     public static int[] digits(int base) {
 
