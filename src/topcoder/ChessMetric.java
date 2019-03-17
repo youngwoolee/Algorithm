@@ -13,9 +13,6 @@
  */
 package topcoder;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 public class ChessMetric {
 
     int dx[] = {1, 1, 0, -1, -1, -1, 0, 1, -2, -2, -1, 1, 2, 2, 1, -1};
@@ -23,42 +20,41 @@ public class ChessMetric {
 
     public long howMany(int size, int[] start, int[] end, int numMoves) {
 
-        long[][][] ways = new long[100][100][55];
-
+        long[][] ways = new long[size][size];
         //시작 위치
-        ways[start[0]][start[1]][0] = 1;
+        ways[start[0]][start[1]] = 1;
 
-        for(int i=1; i<= numMoves; i++){
+        for (int i = 0; i < numMoves; i++) {
+            long[][] prevResult = ways;
+            ways = new long[size][size];
 
-            for(int x=0; x<size; x++) {
+            for (int x = 0; x < size; x++) {
 
                 for (int y = 0; y < size; y++) {
 
-                    for(int j=0; j< dx.length; j++) {
-                        int nextX = x + dx[j];
-                        int nextY = y + dy[j];
+                    for (Move move : Move.values()) {
+                        int nextX = x + move.x;
+                        int nextY = y + move.y;
 
-
-                        //이동한 좌표가 범위가 보드 사이즈를 넘으면 무시
-                        if (0 > nextX || nextX > size || 0 > nextY || nextY > size) {
-                            continue;
+                        if (nextX >= 0 && nextX < size && nextY >= 0 && nextY < size) {
+                            ways[nextX][nextY] += prevResult[x][y];
                         }
-                        ways[nextY][nextX][i] += ways[y][x][i-1];
 
                     }
                 }
             }
-        }
 
-        return ways[end[0]][end[1]][numMoves];
+        }
+        return ways[end[0]][end[1]];
+
     }
 
 
-    public static void main(String[] args) {
+    public static void main (String[]args){
 
         ChessMetric chessMetric = new ChessMetric();
 
-        int size  = 3;
+        int size = 3;
         int[] start = {0, 0};
         int[] end = {0, 0};
         int numMoves = 2;
@@ -69,4 +65,19 @@ public class ChessMetric {
 
     }
 
+    private enum Move {
+        LEFT(-1, 0), RIGHT(1, 0), UP(0, 1), DOWN(0, -1),
+        UP_LEFT(-1, 1), UP_RIGHT(1, 1), DOWN_LEFT(-1, -1), DOWN_RIGHT(1, -1),
+        UUL(-1, 2), UUR(1, 2), ULL(-2, 1), URR(2, 1),
+        DDL(-1, -2), DDR(1, -2), DLL(-2, -1), DRR(2, -1);
+
+        public int x;
+        public int y;
+
+        Move(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 }
+
